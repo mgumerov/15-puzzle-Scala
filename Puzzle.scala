@@ -14,7 +14,7 @@ object Puzzle {
     val movesArr = Array('u','d','l','r');
     val move = movesArr(rndgen.nextInt(movesArr.length));
     apply(board, move) match {
-      case None => shuffle(rndgen, board, moves-1);
+      case None => shuffle(rndgen, board, moves); //move is not valid -> do not decrement remaining moves
       case Some(newboard) => shuffle(rndgen, newboard, moves-1);
     }
   }
