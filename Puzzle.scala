@@ -1,6 +1,6 @@
 object Puzzle {
   @scala.annotation.tailrec
-  def step(board: Array[Int]) {
+  private final def step(board: Array[Int]) {
     println(board.mkString(","));
     val ln = scala.io.StdIn.readLine();
     if (ln == "") return;
