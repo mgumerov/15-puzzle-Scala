@@ -11,21 +11,20 @@ object Puzzle {
 
   private final def shuffle(rndgen: scala.util.Random, board: Board, moves: Int) : Board = {
     if (moves == 0) return board;
-    val movesArr = Array('u','d','l','r');
-    val move = movesArr(rndgen.nextInt(movesArr.length));
+    val move = 1 + rndgen.nextInt(15);
     apply(board, move) match {
       case None => shuffle(rndgen, board, moves); //move is not valid -> do not decrement remaining moves
       case Some(newboard) => shuffle(rndgen, newboard, moves-1);
     }
   }
 
-  private final def apply(board: Board, move: Char) : Option[Board] = {
+  private final def apply(board: Board, move: Int) : Option[Board] = {
     val hole = board.indexOf(0);
     val active : Option[Int] = move match {
-      case 'u'=> if (hole > 3) Some(board(hole-4)) else None;
-      case 'd'=> if (hole < 12) Some(board(hole+4)) else None;
-      case 'l'=> if (hole%4 != 0) Some(board(hole-1)) else None;
-      case 'r'=> if (hole%4 != 3) Some(board(hole+1)) else None;
+      case x if (hole > 3 && move == board(hole-4)) => Some(move);
+      case x if (hole < 12 && move == board(hole+4)) => Some(move);
+      case x if (hole%4 != 0 && move == board(hole-1)) => Some(move);
+      case x if (hole%4 != 3 && move == board(hole+1)) => Some(move);
       case _ => None;
     }
 
@@ -45,11 +44,8 @@ object Puzzle {
 
     val ln = scala.io.StdIn.readLine();
     if (ln == "") return;
-    val move : Option[Char] = ln match {
-      case "u" => Some('u');
-      case "d" => Some('d');
-      case "l" => Some('l');
-      case "r" => Some('r');
+    val move : Option[Int] = scala.util.Try(ln.toInt).toOption match {
+      case Some(x) if 1 until 16 contains x => Some(x);
       case _ => None;
     }
 
